@@ -1,0 +1,435 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> ID EQUAL expression
+Rule 2     expression -> expression PLUS expression
+Rule 3     expression -> expression MINUS expression
+Rule 4     expression -> expression MULT expression
+Rule 5     expression -> expression DIV expression
+Rule 6     expression -> expression POWER expression
+Rule 7     expression -> MINUS expression
+Rule 8     expression -> LPAREN expression RPAREN
+Rule 9     expression -> NUM
+Rule 10    expression -> ID
+
+Terminals, with rules where they appear
+
+DIV                  : 5
+EQUAL                : 1
+ID                   : 1 10
+LPAREN               : 8
+MINUS                : 3 7
+MULT                 : 4
+NUM                  : 9
+PLUS                 : 2
+POWER                : 6
+RPAREN               : 8
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 2 2 3 3 4 4 5 5 6 6 7 8
+statement            : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . ID EQUAL expression
+
+    ID              shift and go to state 2
+
+    statement                      shift and go to state 1
+
+state 1
+
+    (0) S' -> statement .
+
+
+
+state 2
+
+    (1) statement -> ID . EQUAL expression
+
+    EQUAL           shift and go to state 3
+
+
+state 3
+
+    (1) statement -> ID EQUAL . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 5
+
+state 4
+
+    (10) expression -> ID .
+
+    PLUS            reduce using rule 10 (expression -> ID .)
+    MINUS           reduce using rule 10 (expression -> ID .)
+    MULT            reduce using rule 10 (expression -> ID .)
+    DIV             reduce using rule 10 (expression -> ID .)
+    POWER           reduce using rule 10 (expression -> ID .)
+    $end            reduce using rule 10 (expression -> ID .)
+    RPAREN          reduce using rule 10 (expression -> ID .)
+
+
+state 5
+
+    (1) statement -> ID EQUAL expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    $end            reduce using rule 1 (statement -> ID EQUAL expression .)
+    PLUS            shift and go to state 9
+    MINUS           shift and go to state 10
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    POWER           shift and go to state 13
+
+
+state 6
+
+    (7) expression -> MINUS . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 14
+
+state 7
+
+    (8) expression -> LPAREN . expression RPAREN
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 15
+
+state 8
+
+    (9) expression -> NUM .
+
+    PLUS            reduce using rule 9 (expression -> NUM .)
+    MINUS           reduce using rule 9 (expression -> NUM .)
+    MULT            reduce using rule 9 (expression -> NUM .)
+    DIV             reduce using rule 9 (expression -> NUM .)
+    POWER           reduce using rule 9 (expression -> NUM .)
+    $end            reduce using rule 9 (expression -> NUM .)
+    RPAREN          reduce using rule 9 (expression -> NUM .)
+
+
+state 9
+
+    (2) expression -> expression PLUS . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 16
+
+state 10
+
+    (3) expression -> expression MINUS . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 17
+
+state 11
+
+    (4) expression -> expression MULT . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 18
+
+state 12
+
+    (5) expression -> expression DIV . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 19
+
+state 13
+
+    (6) expression -> expression POWER . expression
+    (2) expression -> . expression PLUS expression
+    (3) expression -> . expression MINUS expression
+    (4) expression -> . expression MULT expression
+    (5) expression -> . expression DIV expression
+    (6) expression -> . expression POWER expression
+    (7) expression -> . MINUS expression
+    (8) expression -> . LPAREN expression RPAREN
+    (9) expression -> . NUM
+    (10) expression -> . ID
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 7
+    NUM             shift and go to state 8
+    ID              shift and go to state 4
+
+    expression                     shift and go to state 20
+
+state 14
+
+    (7) expression -> MINUS expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    PLUS            reduce using rule 7 (expression -> MINUS expression .)
+    MINUS           reduce using rule 7 (expression -> MINUS expression .)
+    MULT            reduce using rule 7 (expression -> MINUS expression .)
+    DIV             reduce using rule 7 (expression -> MINUS expression .)
+    POWER           reduce using rule 7 (expression -> MINUS expression .)
+    $end            reduce using rule 7 (expression -> MINUS expression .)
+    RPAREN          reduce using rule 7 (expression -> MINUS expression .)
+
+  ! PLUS            [ shift and go to state 9 ]
+  ! MINUS           [ shift and go to state 10 ]
+  ! MULT            [ shift and go to state 11 ]
+  ! DIV             [ shift and go to state 12 ]
+  ! POWER           [ shift and go to state 13 ]
+
+
+state 15
+
+    (8) expression -> LPAREN expression . RPAREN
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    RPAREN          shift and go to state 21
+    PLUS            shift and go to state 9
+    MINUS           shift and go to state 10
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    POWER           shift and go to state 13
+
+
+state 16
+
+    (2) expression -> expression PLUS expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    PLUS            reduce using rule 2 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 2 (expression -> expression PLUS expression .)
+    MULT            reduce using rule 2 (expression -> expression PLUS expression .)
+    DIV             reduce using rule 2 (expression -> expression PLUS expression .)
+    POWER           reduce using rule 2 (expression -> expression PLUS expression .)
+    $end            reduce using rule 2 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 2 (expression -> expression PLUS expression .)
+
+  ! PLUS            [ shift and go to state 9 ]
+  ! MINUS           [ shift and go to state 10 ]
+  ! MULT            [ shift and go to state 11 ]
+  ! DIV             [ shift and go to state 12 ]
+  ! POWER           [ shift and go to state 13 ]
+
+
+state 17
+
+    (3) expression -> expression MINUS expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    PLUS            reduce using rule 3 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 3 (expression -> expression MINUS expression .)
+    MULT            reduce using rule 3 (expression -> expression MINUS expression .)
+    DIV             reduce using rule 3 (expression -> expression MINUS expression .)
+    POWER           reduce using rule 3 (expression -> expression MINUS expression .)
+    $end            reduce using rule 3 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 3 (expression -> expression MINUS expression .)
+
+  ! PLUS            [ shift and go to state 9 ]
+  ! MINUS           [ shift and go to state 10 ]
+  ! MULT            [ shift and go to state 11 ]
+  ! DIV             [ shift and go to state 12 ]
+  ! POWER           [ shift and go to state 13 ]
+
+
+state 18
+
+    (4) expression -> expression MULT expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    MULT            reduce using rule 4 (expression -> expression MULT expression .)
+    DIV             reduce using rule 4 (expression -> expression MULT expression .)
+    POWER           reduce using rule 4 (expression -> expression MULT expression .)
+    $end            reduce using rule 4 (expression -> expression MULT expression .)
+    RPAREN          reduce using rule 4 (expression -> expression MULT expression .)
+    PLUS            shift and go to state 9
+    MINUS           shift and go to state 10
+
+  ! PLUS            [ reduce using rule 4 (expression -> expression MULT expression .) ]
+  ! MINUS           [ reduce using rule 4 (expression -> expression MULT expression .) ]
+  ! MULT            [ shift and go to state 11 ]
+  ! DIV             [ shift and go to state 12 ]
+  ! POWER           [ shift and go to state 13 ]
+
+
+state 19
+
+    (5) expression -> expression DIV expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    MULT            reduce using rule 5 (expression -> expression DIV expression .)
+    DIV             reduce using rule 5 (expression -> expression DIV expression .)
+    POWER           reduce using rule 5 (expression -> expression DIV expression .)
+    $end            reduce using rule 5 (expression -> expression DIV expression .)
+    RPAREN          reduce using rule 5 (expression -> expression DIV expression .)
+    PLUS            shift and go to state 9
+    MINUS           shift and go to state 10
+
+  ! PLUS            [ reduce using rule 5 (expression -> expression DIV expression .) ]
+  ! MINUS           [ reduce using rule 5 (expression -> expression DIV expression .) ]
+  ! MULT            [ shift and go to state 11 ]
+  ! DIV             [ shift and go to state 12 ]
+  ! POWER           [ shift and go to state 13 ]
+
+
+state 20
+
+    (6) expression -> expression POWER expression .
+    (2) expression -> expression . PLUS expression
+    (3) expression -> expression . MINUS expression
+    (4) expression -> expression . MULT expression
+    (5) expression -> expression . DIV expression
+    (6) expression -> expression . POWER expression
+
+    $end            reduce using rule 6 (expression -> expression POWER expression .)
+    RPAREN          reduce using rule 6 (expression -> expression POWER expression .)
+    PLUS            shift and go to state 9
+    MINUS           shift and go to state 10
+    MULT            shift and go to state 11
+    DIV             shift and go to state 12
+    POWER           shift and go to state 13
+
+  ! PLUS            [ reduce using rule 6 (expression -> expression POWER expression .) ]
+  ! MINUS           [ reduce using rule 6 (expression -> expression POWER expression .) ]
+  ! MULT            [ reduce using rule 6 (expression -> expression POWER expression .) ]
+  ! DIV             [ reduce using rule 6 (expression -> expression POWER expression .) ]
+  ! POWER           [ reduce using rule 6 (expression -> expression POWER expression .) ]
+
+
+state 21
+
+    (8) expression -> LPAREN expression RPAREN .
+
+    PLUS            reduce using rule 8 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 8 (expression -> LPAREN expression RPAREN .)
+    MULT            reduce using rule 8 (expression -> LPAREN expression RPAREN .)
+    DIV             reduce using rule 8 (expression -> LPAREN expression RPAREN .)
+    POWER           reduce using rule 8 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 8 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 8 (expression -> LPAREN expression RPAREN .)
+

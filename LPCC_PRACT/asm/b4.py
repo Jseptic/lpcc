@@ -29,15 +29,15 @@ def pass1(lines):
     intermediate = [] # List to hold intermediate code lines
 
     for lineno, line in enumerate(lines, 1):
-        # Remove comments and trim the whitespace
+        # Remove comments and trim whitespace.
         line = line.split(';')[0].strip()
         if not line:
             continue
 
-        # Tokenize by whitespace and comma
+        # Tokenize by whitespace and commas.
         tokens = [token for token in line.replace(',', ' ').split() if token]
 
-        # Skip if no tokens present
+        # Skip if no tokens present.
         if not tokens:
             continue
 
@@ -46,7 +46,8 @@ def pass1(lines):
         first = tokens[0]
         if first not in OPCODE_MAP and first not in DECLARATIVE_MAP:
             label = first
-            # Record label in symbol table with current LC if not already recorded.
+            # If label not already recorded, add it with current LOCCTR.
+            # (May later be updated when a DS directive is encountered.)
             if label not in symtab:
                 symtab[label] = locctr
             tokens = tokens[1:]
@@ -75,12 +76,18 @@ def pass1(lines):
             if not operand or not operand.isdigit():
                 print(f"Error on line {lineno}: Invalid operand for {opcode}")
                 sys.exit(1)
-            # If there's a label, it already exists in symbol table.
+            # Update symbol address using the label from this DS line.
+            # Even if the symbol was earlier added (with a placeholder), we update it.
+            if label is not None:
+                symtab[label] = locctr
+            else:
+                print(f"Error on line {lineno}: Declarative statement missing a label")
+                sys.exit(1)
             intermediate.append(f"{locctr}\t{DECLARATIVE_MAP[opcode]}\t(C,{operand})")
             locctr += int(operand)
             continue
 
-        # Process Imperative Statements
+        # Process Imperative Statements.
         if opcode in OPCODE_MAP:
             code = OPCODE_MAP[opcode]
             line_intermediate = f"{locctr}\t{code}"
@@ -91,12 +98,13 @@ def pass1(lines):
 
             # For READ, the operand is a symbol.
             if opcode == 'READ':
-                # Add symbol to symbol table (address to be backfilled by DS later) if not present.
+                # Add symbol to symbol table if not already added.
                 if operand not in symtab:
                     symtab[operand] = None
                 line_intermediate += f"\t(S,{operand})"
             else:
                 # For instructions like MOVER, SUB that require a register and a symbol.
+                # tokens[1] should be the register if it exists in REGISTER_MAP.
                 reg = tokens[1] if tokens[1] in REGISTER_MAP else None
                 if reg:
                     sym = tokens[2] if len(tokens) > 2 else None
@@ -120,7 +128,7 @@ def pass1(lines):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python intermediate_code.py <sourcefile.asm>")
+        print("Usage: python b4.py <sourcefile.asm>")
         sys.exit(1)
 
     with open(sys.argv[1]) as f:

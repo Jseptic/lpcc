@@ -45,6 +45,14 @@ def pass1(lines):
 
         opcode  = parts[idx]
         operand = parts[idx+1] if len(parts) > idx+1 else None
+        
+        for tok in parts[idx+1:]:
+            # Optionally, normalize the token, e.g., replace fancy quotes with ASCII quotes.
+            norm_tok = tok.replace("’", "'")
+            if norm_tok.startswith("="):
+                # Add the literal to the literal pool if not already added.
+                if norm_tok not in lit_pool:
+                    lit_pool.append(norm_tok)
 
         # collect literal
         if operand and is_literal(operand) and operand not in lit_pool:

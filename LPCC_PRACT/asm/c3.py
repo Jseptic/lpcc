@@ -13,26 +13,27 @@ def is_number(s):
         return False
 
 def is_literal(tok):
+    # Checks if the token starts with '=' (assumes ASCII '=')
     return tok.startswith('=')
 
 def pass1(lines):
-    locctr = 0
+    locctr       = 0
     all_literals = []  # stores all literals in order of appearance
-    pending = []       # literals waiting to be assigned an address (current pool)
-    pool_table = []    # list of starting literal numbers (1-based) for each pool
+    pending      = []  # literals waiting to be assigned an address (current pool)
+    pool_table   = []  # list of starting literal numbers (1-based) for each pool
 
     for lineno, line in enumerate(lines, 1):
-        # Remove comments and trim whitespace
+        # Remove comments and trim whitespace.
         line = line.split(';')[0].strip()
         if not line:
             continue
 
-        # Tokenize on whitespace or comma
+        # Tokenize on whitespace or comma.
         parts = [t for t in line.replace(',', ' ').split() if t]
         if not parts:
             continue
 
-        # Handle START directive
+        # Handle START directive.
         if parts[0] == 'START':
             if len(parts) != 2 or not is_number(parts[1]):
                 print(f"Error on line {lineno}: invalid START", file=sys.stderr)
@@ -40,40 +41,44 @@ def pass1(lines):
             locctr = int(parts[1])
             continue
 
-        # Handle LTORG directive - assign addresses to pending literals and mark a new pool
+        # Handle LTORG directive - assign addresses to pending literals and mark a new pool.
         if parts[0] == 'LTORG':
             if pending:
-                start_idx = len(all_literals) - len(pending) + 1  # 1-based index of first literal in current pool
+                start_idx = len(all_literals) - len(pending) + 1  # 1-based index
                 pool_table.append(start_idx)
                 locctr += len(pending)
                 pending.clear()
             continue
 
-        # Check for label; if first token is not an opcode, declarative, or directive then skip it as a label.
+        # Check for label; if first token is not an opcode, declarative, or directive, then it's a label.
         idx = 0
         if parts[0] not in IMPERATIVES and parts[0] not in DECLARATIVES and parts[0] not in DIRECTIVES:
             idx = 1
 
         opcode = parts[idx]
-        operand = parts[idx+1] if len(parts) > (idx+1) else None
 
-        # Collect literal if operand is literal and not already recorded
-        if operand and is_literal(operand) and operand not in all_literals:
-            all_literals.append(operand)
-            pending.append(operand)
+        # Process all operand tokens (from parts[idx+1:]) to collect literals.
+        for tok in parts[idx+1:]:
+            # Normalize token (if fancy quotes appear, etc.)
+            norm_tok = tok.replace("’", "'")
+            if is_literal(norm_tok) and norm_tok not in all_literals:
+                all_literals.append(norm_tok)
+                pending.append(norm_tok)
 
-        # Update the location counter
+        # Update locctr based on the opcode.
         if opcode in IMPERATIVES:
             locctr += 1
         elif opcode == 'DC':
             locctr += 1
         elif opcode == 'DS':
-            if not operand or not is_number(operand):
+            # For DS, the operand should be a number.
+            # (Iterating over operands may not be needed here; we expect just one operand.)
+            if len(parts) <= idx+1 or not is_number(parts[idx+1]):
                 print(f"Error on line {lineno}: invalid DS", file=sys.stderr)
                 sys.exit(1)
-            locctr += int(operand)
+            locctr += int(parts[idx+1])
         elif opcode == 'END':
-            # At END, process remaining pending literals (if any) as a final pool
+            # At END, process any remaining pending literals as the final pool.
             if pending:
                 start_idx = len(all_literals) - len(pending) + 1
                 pool_table.append(start_idx)
@@ -81,8 +86,8 @@ def pass1(lines):
                 pending.clear()
             break
         else:
-            print(f"Error on line {lineno}: unknown opcode '{opcode}'", file=sys.stderr)
-            sys.exit(1)
+            # For any unrecognized opcodes or directives, no LOCCTR update.
+            pass
 
     return all_literals, pool_table
 
